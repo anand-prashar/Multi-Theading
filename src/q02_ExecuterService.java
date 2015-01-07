@@ -2,7 +2,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class e02_ExecuterService 
+public class q02_ExecuterService 
 {
 	public static void main(String[] args) 
 	{
@@ -12,7 +12,8 @@ public class e02_ExecuterService
 		thread_Pool.execute(new myThread("T_2"));
 		thread_Pool.execute(new myThread("T_3"));
 		
-		// NEED TO SHUT DOWN SERVICE WHEN USED, ELSE WILL REMAIN ACTIVE
+		// NEED TO TELL SERVICE that we are not providing any more threads, 
+		// ELSE WILL REMAIN ACTIVE
 		// comment below line to verify
 		thread_Pool.shutdown();
 	}

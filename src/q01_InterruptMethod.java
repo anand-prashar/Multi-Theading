@@ -1,7 +1,7 @@
 import java.security.SecureRandom;
 
 
-public class e01_InterruptMethod {
+public class q01_InterruptMethod {
 
 	public static void main(String[] args) 
 	{
