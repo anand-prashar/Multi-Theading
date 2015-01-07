@@ -1,4 +1,4 @@
-import java.security.SecureRandom;
+//import java.security.SecureRandom;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -77,7 +77,7 @@ class SynchronizedBuffer implements Buffer<Integer>
  */
 //----------------------------- PRODUCER ---------------------------------
 
-class ProducerThread2 implements Runnable
+/*class ProducerThread2 implements Runnable
 {
 	ArrayBlockingQueue<Integer> refToBuffer; // Need ABQ here
 	private static final SecureRandom randomGenerator = new SecureRandom();
@@ -144,4 +144,4 @@ class ConsumerThread2   implements Runnable
 		super();
 		this.refToBuffer = refToBuffer;
 	}	
-}
+}*/
