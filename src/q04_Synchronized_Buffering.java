@@ -9,16 +9,21 @@ public class q04_Synchronized_Buffering
 	public static void main(String[] args) throws InterruptedException
 	{
 		
-		// create Buffer(of size 1) to store Ints
-		ArrayBlockingQueue<Integer> sharedBuffer = new ArrayBlockingQueue<>(1); // Q is of size 1
-		//Buffer<Integer> sharedBuffer = new unSynchronizedBuffer();
+		// create Threadsafe Buffer(of size 1) to store Ints
+		ArrayBlockingQueue<Integer> sharedMemory = new ArrayBlockingQueue<>(1); // Q is of size 1
+		Buffer<Integer> sharedBuffer2 = new SynchronizedBuffer(sharedMemory);
 		
 		// create threadPool for 2 threads
 		ExecutorService threadPool= Executors.newCachedThreadPool();
 		
 		// request Trigger of 2 fresh Threads
-		threadPool.execute(new ProducerThread2 (sharedBuffer));
-		threadPool.execute(new ConsumerThread2 (sharedBuffer));
+		threadPool.execute(new ProducerThread <Buffer<Integer>>  (sharedBuffer2));
+		threadPool.execute(new ConsumerThread <Buffer<Integer>>  (sharedBuffer2));
+		
+		/*threadPool.execute(new ProducerThread2(sharedMemory));
+		threadPool.execute(new ConsumerThread2(sharedMemory));*/
+		
+		
 		
 		// no new tasks accepted
 		threadPool.shutdown();
@@ -37,16 +42,21 @@ class SynchronizedBuffer implements Buffer<Integer>
 	
 	ArrayBlockingQueue<Integer> bufferValue;   //ABQ HAS TAKE() & PUT() - threadsafe methods
 	
+	public SynchronizedBuffer(ArrayBlockingQueue<Integer> bufferValue) 
+	{
+		this.bufferValue = bufferValue;
+	}
+	
 	@Override
 	public void blockingPush(Integer value) throws InterruptedException 
 	{
-		bufferValue.put(value);
+		bufferValue.put(value);   // CAUSES TO WAIT if buffer is full
 	}
 
 	@Override
 	public Integer blockingPull() throws InterruptedException 
 	{
-		return bufferValue.take();  // CAUSES TO WAIT
+		return bufferValue.take();  // CAUSES TO WAIT if Buffer is empty
 		
 	}
 	
@@ -59,6 +69,12 @@ class SynchronizedBuffer implements Buffer<Integer>
 	}
 }
 
+
+
+
+/*  NOT NEEDED - Using Original Prod+ Consumer classes now
+ * 
+ */
 //----------------------------- PRODUCER ---------------------------------
 
 class ProducerThread2 implements Runnable
