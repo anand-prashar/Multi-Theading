@@ -17,7 +17,7 @@ public class ProducerThread<T extends Buffer<Integer> >   implements Runnable
 					refToBuffer.blockingPush(i);
 					sum += i;
 					
-					System.out.print("\nProducer pushed "+i+". Total Push sums="+sum+".   Buffer = "+refToBuffer+"\n");
+					//System.out.print("\nProducer pushed "+i+". Total Push sums="+sum+".   Buffer = "+refToBuffer+"\n");
 			    } 
 			catch (InterruptedException e) 
 			    {

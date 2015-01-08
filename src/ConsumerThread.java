@@ -19,7 +19,7 @@ public class ConsumerThread<E extends Buffer<Integer>>   implements Runnable
 					if(pulledVal != null)
 					sum += pulledVal;
 					
-					System.out.print("Consumer_"+i+" read "+pulledVal+". Total pull sums="+sum+".   Buffer = "+refToBuffer+"\n");
+					//System.out.print("Consumer_"+i+" read "+pulledVal+". Total pull sums="+sum+".   Buffer = "+refToBuffer+"\n");
 			    } 
 			catch (InterruptedException e) 
 			    {
