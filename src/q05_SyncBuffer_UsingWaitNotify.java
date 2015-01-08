@@ -18,9 +18,7 @@ public class q05_SyncBuffer_UsingWaitNotify
 		
 		
 		// no new tasks accepted
-		threadPool.shutdown();
-		
-		
+		threadPool.shutdown();				
 		
 	}
 
@@ -30,38 +28,70 @@ public class q05_SyncBuffer_UsingWaitNotify
 
 class SyncedBuffer implements Buffer<Integer>
 {
-	Integer bufferData;
-	Boolean lockedForWrite=false;
+	Integer bufferData=0;
+	Boolean getBufferLock=true, alreadyChanged=false;
 
 	@Override
-	public void blockingPush(Integer value) throws InterruptedException 
+	public synchronized  void blockingPush(Integer value) throws InterruptedException 
 	{
-		synchronized (lockedForWrite) 
+		
+		System.out.println("...GOT IN PUSH = "+value);
+		while(true)
 		{
-			if(lockedForWrite==false && bufferData==null)
+		synchronized (getBufferLock) 
+		{
+			
+			if(alreadyChanged==false)
 			{
-				lockedForWrite= true;
 				this.bufferData = value; // push data
-				lockedForWrite = false;
-				notifyAll(); // 
+				System.out.println("...WROT :  "+value+" .. buffer="+bufferData);
+				
+				alreadyChanged = true;
+				
+				getBufferLock.notifyAll(); //
 			}
 			else
-				this.wait();  // wait current thread	
+				getBufferLock.wait();  // wait to get lock on 'getBufferLock'	
 			
-		}
+			break; // break While
+		}}
+		System.out.println("...EXITING PUSH = "+value);
 		
-		
-		
+				
 	}
 
 	@Override
-	public Integer blockingPull() throws InterruptedException 
+	public  Integer blockingPull() throws InterruptedException 
 	{
-		while(lockedForWrite==false)
+		Integer data=null;
+		
+		while(true)
+		synchronized (getBufferLock) 
 		{
-			wait();
+			
+			if(alreadyChanged==false)
+				getBufferLock.wait();
+			
+			data = bufferData;
+			
+			bufferData= 0;  // means buffer is empty now
+			//System.out.println(" - - READ :  "+data+" .. buffer="+bufferData);
+			
+			alreadyChanged = false;
+			getBufferLock.notifyAll();
+			
+			break;
+			
 		}
-		return bufferData;
+		return data;
+
 	}
 	
+	public String toString()
+	{
+		if (bufferData== null)
+		return "NULL";
+		else
+			return Integer.toString(bufferData);
+	}
 }

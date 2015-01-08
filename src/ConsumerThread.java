@@ -15,6 +15,7 @@ public class ConsumerThread<E extends Buffer<Integer>>   implements Runnable
 			try {
 					Thread.sleep(randomGenerator.nextInt(1500)); // sleep 0 - 1.5 sec
 					pulledVal = refToBuffer.blockingPull();
+					
 					if(pulledVal != null)
 					sum += pulledVal;
 					
